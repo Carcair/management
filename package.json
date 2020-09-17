@@ -1,0 +1,31 @@
+{
+  "name": "managment",
+  "version": "1.0.0",
+  "description": "Managment service for URL shortening application.",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "npx nodemon src/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Carcair/managment.git"
+  },
+  "author": "Delić Emir",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Carcair/managment/issues"
+  },
+  "homepage": "https://github.com/Carcair/managment#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mysql2": "^2.1.0",
+    "sequelize": "^6.3.5",
+    "shortid": "^2.2.15",
+    "valid-url": "^1.0.9"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
