@@ -9,7 +9,7 @@ const express = require('express');
 const { NODE_ENV } = require('../../config');
 
 /**
- * Load controller and helpers
+ * Load controller
  */
 const { getUrls, newUrl, checkUrl } = require('../controllers/createCtrl');
 
@@ -20,7 +20,6 @@ const router = express.Router();
 
 /**
  * Test creation route, dev only
- * @route /api/create/test
  */
 if (NODE_ENV === 'development') {
   router.get('/test', getUrls);
@@ -28,7 +27,6 @@ if (NODE_ENV === 'development') {
 
 /**
  * Create new URL
- * @route /api/create
  */
 router.post('/', checkUrl, newUrl);
 

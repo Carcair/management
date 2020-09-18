@@ -29,7 +29,7 @@ if (NODE_ENV === 'development') {
         res.status(200).json(urls);
       })
       .catch((err) => {
-        res.status(400).end('Request failed.');
+        res.status(503).end('Request failed.');
       });
   };
 }
@@ -50,7 +50,7 @@ exports.checkUrl = (req, res, next) => {
       else res.status(406).end('Already exists.');
     })
     .catch((err) => {
-      res.status(400).end('Request failed.');
+      res.status(503).json({ err });
     });
 };
 
@@ -70,31 +70,15 @@ exports.newUrl = async (req, res) => {
     .then((urls) => {
       // Temp array with all existing shortURLs
       let tempArr = [];
+      // Seperate only shortURL variables
       urls.forEach((element) => {
         tempArr.push(element.shortURL);
       });
 
-      // // Generate shortURL
-      // let shortURL = baseUrl + '/' + shortid.generate();
-
-      // // In case if shortURL exists, generate until we get different
-      // // Prevent repetition
-      // while (tempArr.includes(shortURL)) {
-      //   shortURL = baseUrl + '/' + shortid.generate();
-      // }
-
-      // // Object we'll insert into DB
-      // const tempObj = {
-      //   realURL,
-      //   shortURL,
-      // };
-
-      // // Validate URLs
-      // if (validateUrl(tempObj.realURL === false || shortURL === false))
-      //   res.status(406).end('Invalid URL');
-
+      // Create object with URL variables
       const temp = createURLObj(realURL, baseURL, tempArr);
 
+      // Will return 406 in case URLs aren't valid
       if (temp === 406) res.status(406).end('Invalid URLs.');
 
       // Insert into DB
@@ -105,14 +89,17 @@ exports.newUrl = async (req, res) => {
             where: { realURL },
             raw: true,
           }).then((url) => {
+            // Successful insert
             res.status(201).json(url);
           });
         })
         .catch((err) => {
-          res.status(400).end('Request failed.');
+          // Failed query
+          res.status(503).json({ err });
         });
     })
     .catch((err) => {
-      res.status(400).end('Request failed.');
+      // Failed query
+      res.status(503).json({ err });
     });
 };
