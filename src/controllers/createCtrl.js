@@ -50,7 +50,7 @@ exports.checkUrl = (req, res, next) => {
       else res.status(406).end('Already exists.');
     })
     .catch((err) => {
-      res.status(503).end('Request failed.');
+      res.status(503).json({ err });
     });
 };
 
@@ -95,11 +95,11 @@ exports.newUrl = async (req, res) => {
         })
         .catch((err) => {
           // Failed query
-          res.status(503).end('Request failed.');
+          res.status(503).json({ err });
         });
     })
     .catch((err) => {
       // Failed query
-      res.status(503).end('Request failed.');
+      res.status(503).json({ err });
     });
 };

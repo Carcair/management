@@ -6,9 +6,8 @@
 //                                  //
 //////////////////////////////////////
 
-// TODO: Create all routes and their functionality
-// FIXME: Change from static to dynamic URL shortening, use url module
-// FIXME: Change SQL error response to server errors
+// TODO: Delete development env code after
+// FIXME:
 
 /**
  * loading dependencies
