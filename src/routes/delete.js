@@ -4,11 +4,6 @@
 const express = require('express');
 
 /**
- * Load variables
- */
-const { NODE_ENV } = require('../../config');
-
-/**
  * Load controller
  */
 const { deleteUrl } = require('../controllers/deleteCtrl');

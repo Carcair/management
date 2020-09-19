@@ -3,6 +3,13 @@
  */
 const validUrl = require('valid-url');
 const shortid = require('shortid');
+const rabbit = require('amqplib/callback_api');
+const rabbitConfig = require('./rabbitHandler');
+
+/**
+ * Load URL schema
+ */
+const Url = require('../models/sequelize/Url');
 
 /**
  * Generate object of URL variables
@@ -27,4 +34,19 @@ exports.createURLObj = (realURL, baseURL, arr) => {
     realURL,
     shortURL,
   };
+};
+
+exports.getUrls = () => {
+  // Get all URLs
+  Url.findAll({ raw: true })
+    .then((urls) => {
+      rabbit.connect('amqp://localhost:5672', (err, conn) => {
+        if (err != null) throw err;
+
+        rabbitConfig.sendFirstPayload(conn, urls);
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };

@@ -14,6 +14,7 @@
  */
 const express = require('express');
 const cors = require('cors');
+const { getUrls } = require('./util/helpers');
 
 /**
  * Load secret variables
@@ -30,6 +31,11 @@ const app = express();
  */
 app.use(express.json({ limit: '500kb' }));
 app.use(cors());
+
+/**
+ * Initialize first data transfer
+ */
+getUrls();
 
 /**
  * Load routes

@@ -1,7 +1,8 @@
 /**
  * Load modules
  */
-const shortid = require('shortid');
+const rabbit = require('amqplib/callback_api');
+const rabbitConfig = require('../util/rabbitHandler');
 
 /**
  * Load sequelize schema
@@ -9,30 +10,9 @@ const shortid = require('shortid');
 const Url = require('../models/sequelize/Url');
 
 /**
- * Load config vars
- */
-const { NODE_ENV } = require('../../config');
-
-/**
  * Load util helper functions
  */
 const { createURLObj } = require('../util/helpers');
-
-/**
- * Get URLs, dev only
- */
-if (NODE_ENV === 'development') {
-  exports.getUrls = (req, res) => {
-    // Get all URLs
-    Url.findAll({ raw: true })
-      .then((urls) => {
-        res.status(200).json(urls);
-      })
-      .catch((err) => {
-        res.status(503).end('Request failed.');
-      });
-  };
-}
 
 /**
  * Check if realUrl exists
@@ -90,6 +70,11 @@ exports.newUrl = async (req, res) => {
             raw: true,
           }).then((url) => {
             // Successful insert
+            rabbit.connect('amqp://localhost:5672', (err, conn) => {
+              if (err != null) throw err;
+
+              rabbitConfig.sendPayload(conn, url);
+            });
             res.status(201).json(url);
           });
         })
