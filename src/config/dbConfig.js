@@ -14,7 +14,7 @@ const Sequelize = require('sequelize');
 const db = new Sequelize(dbName, dbUsername, dbPass, {
   host: dbUrl,
   dialect: 'mysql',
-  // logging: false,
+  logging: false,
   define: {
     timestamps: false,
   },

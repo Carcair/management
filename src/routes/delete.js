@@ -14,13 +14,6 @@ const { deleteUrl } = require('../controllers/deleteCtrl');
 const router = express.Router();
 
 /**
- * Test delete route
- */
-router.get('/test', (req, res) => {
-  res.end('Delete route works!');
-});
-
-/**
  * Delete a URL by its id
  */
 router.delete('/:id', deleteUrl);

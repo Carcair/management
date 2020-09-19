@@ -15,20 +15,31 @@ const Url = require('../models/sequelize/Url');
 exports.deleteUrl = (req, res) => {
   const id = req.params.id;
 
-  Url.destroy({
+  // We need whole object to send back before deleting
+  Url.findOne({
     where: { id },
+    raw: true,
   })
-    .then((result) => {
-      // If there wasn't anything to delete
-      if (result == 0) res.sendStatus(204);
-      // If there was a URL to delete
+    .then((url) => {
+      Url.destroy({
+        where: { id },
+      })
+        .then((result) => {
+          // If there wasn't anything to delete
+          if (result == 0) res.sendStatus(204);
+          // If there was a URL to delete
 
-      rabbit.connect('amqp://localhost:5672', (err, conn) => {
-        if (err != null) throw err;
+          rabbit.connect('amqp://localhost:5672', (err, conn) => {
+            if (err != null) throw err;
 
-        rabbitConfig.delPayload(err, id);
-      });
-      res.status(200).end('Deletion successful.');
+            // Send data of deleted url to Redirection service
+            rabbitConfig.delPayload(conn, url);
+          });
+          res.status(200).end('Deletion successful.');
+        })
+        .catch((err) => {
+          res.status(503).json({ err });
+        });
     })
     .catch((err) => {
       res.status(503).json({ err });

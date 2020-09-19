@@ -1,16 +1,21 @@
 /**
  * Publisher
  */
-const rabbitConfig = {
+const rabbitHandler = {
   /**
    * Sending payload on project start
    */
   sendFirstPayload: (conn, payload) => {
     // On app start we send all existing DB data to consumer/redirection service
+
+    // Open channel
     conn.createChannel((err, channel) => {
       if (err != null) throw err;
 
+      // Assert queue
       channel.assertQueue('firstPayload');
+
+      // Send data sa buffer to queue
       channel.sendToQueue('firstPayload', Buffer.from(JSON.stringify(payload)));
     });
   },
@@ -19,10 +24,14 @@ const rabbitConfig = {
    * Send payload on inserting new URL values in DB
    */
   sendPayload: (conn, payload) => {
+    // Open channel
     conn.createChannel((err, channel) => {
       if (err != null) throw err;
 
+      // Assert queue
       channel.assertQueue('newUrl');
+
+      // Send payload
       channel.sendToQueue('newUrl', Buffer.from(JSON.stringify(payload)));
     });
   },
@@ -31,31 +40,17 @@ const rabbitConfig = {
    * Send URL inf on its deletion from DB
    */
   delPayload: (conn, payload) => {
+    // Open channel
     conn.createChannel((err, channel) => {
       if (err != null) throw err;
 
+      // Assert queue
       channel.assertQueue('delUrl');
-      channel.sendToQueue('delUrl', Buffer.from(payload));
-    });
-  },
 
-  /**
-   * We expect from redirection service data about his full host and protocol values
-   * done on project initialization so we can create correct shortUrl
-   */
-  getUrl: (conn) => {
-    conn.createChannel((err, channel) => {
-      if (err != null) throw err;
-
-      channel.assertQueue('baseUrl');
-      channel.consume('baseUrl', (payload) => {
-        if (payload !== null) {
-          console.log(payload.content.toString());
-          channel.ack(payload);
-        }
-      });
+      // Send payload to queue
+      channel.sendToQueue('delUrl', Buffer.from(JSON.stringify(payload)));
     });
   },
 };
 
-module.exports = rabbitConfig;
+module.exports = rabbitHandler;

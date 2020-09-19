@@ -4,7 +4,7 @@
 const validUrl = require('valid-url');
 const shortid = require('shortid');
 const rabbit = require('amqplib/callback_api');
-const rabbitConfig = require('./rabbitHandler');
+const rabbitHandler = require('./rabbitHandler');
 
 /**
  * Load URL schema
@@ -27,23 +27,27 @@ exports.createURLObj = (realURL, baseURL, arr) => {
   }
 
   // Validate URLs
+  // If not valid, return Not Acceptable
   if (!validUrl.isUri(realURL) || !validUrl.isUri(shortURL)) return 406;
 
   // Object we'll insert into DB
+  // Id is generated inside DB / Auto Increment
   return {
     realURL,
     shortURL,
   };
 };
 
+// Get all URLs
+// And sent them to Rabbit service
+// This payload will be received on startup of Redirection service
 exports.getUrls = () => {
-  // Get all URLs
   Url.findAll({ raw: true })
     .then((urls) => {
       rabbit.connect('amqp://localhost:5672', (err, conn) => {
         if (err != null) throw err;
 
-        rabbitConfig.sendFirstPayload(conn, urls);
+        rabbitHandler.sendFirstPayload(conn, urls);
       });
     })
     .catch((err) => {

@@ -2,7 +2,7 @@
  * Load modules
  */
 const rabbit = require('amqplib/callback_api');
-const rabbitConfig = require('../util/rabbitHandler');
+const rabbitHandler = require('../util/rabbitHandler');
 
 /**
  * Load sequelize schema
@@ -13,6 +13,11 @@ const Url = require('../models/sequelize/Url');
  * Load util helper functions
  */
 const { createURLObj } = require('../util/helpers');
+
+/**
+ * Load secret variables
+ */
+const { baseURL } = require('../../config');
 
 /**
  * Check if realUrl exists
@@ -40,8 +45,6 @@ exports.checkUrl = (req, res, next) => {
 exports.newUrl = async (req, res) => {
   // Get realURL
   const realURL = req.body.realURL;
-  // Get dynamic protocol and host values
-  const baseURL = `${req.protocol}://${req.headers.host}`;
 
   /**
    * We need to generate shortURL that doesn't exist
@@ -73,7 +76,8 @@ exports.newUrl = async (req, res) => {
             rabbit.connect('amqp://localhost:5672', (err, conn) => {
               if (err != null) throw err;
 
-              rabbitConfig.sendPayload(conn, url);
+              // Send url data to Redirection service
+              rabbitHandler.sendPayload(conn, url);
             });
             res.status(201).json(url);
           });
