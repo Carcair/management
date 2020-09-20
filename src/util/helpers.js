@@ -3,7 +3,6 @@
  */
 const validUrl = require('valid-url');
 const shortid = require('shortid');
-const rabbit = require('amqplib/callback_api');
 const rabbitHandler = require('./rabbitHandler');
 
 /**
@@ -44,11 +43,7 @@ exports.createURLObj = (realURL, baseURL, arr) => {
 exports.getUrls = () => {
   Url.findAll({ raw: true })
     .then((urls) => {
-      rabbit.connect('amqp://localhost:5672', (err, conn) => {
-        if (err != null) throw err;
-
-        rabbitHandler.sendFirstPayload(conn, urls);
-      });
+      rabbitHandler.sendFirstPayload(urls);
     })
     .catch((err) => {
       console.log(err);

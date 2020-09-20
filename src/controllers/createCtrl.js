@@ -1,7 +1,6 @@
 /**
  * Load modules
  */
-const rabbit = require('amqplib/callback_api');
 const rabbitHandler = require('../util/rabbitHandler');
 
 /**
@@ -53,7 +52,9 @@ exports.newUrl = async (req, res) => {
     .then((urls) => {
       // Temp array with all existing shortURLs
       let tempArr = [];
+
       // Seperate only shortURL variables
+      // We need to for comparison when generating new shortURL
       urls.forEach((element) => {
         tempArr.push(element.shortURL);
       });
@@ -68,17 +69,16 @@ exports.newUrl = async (req, res) => {
       Url.create(temp)
         .then(() => {
           // Return value we inserted as response
+          // So we can send it to redirection service
           Url.findOne({
             where: { realURL },
             raw: true,
           }).then((url) => {
             // Successful insert
-            rabbit.connect('amqp://localhost:5672', (err, conn) => {
-              if (err != null) throw err;
 
-              // Send url data to Redirection service
-              rabbitHandler.sendPayload(conn, url);
-            });
+            // Send url data to Redirection service
+            rabbitHandler.sendPayload(url);
+
             res.status(201).json(url);
           });
         })
