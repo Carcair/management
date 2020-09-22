@@ -10,11 +10,14 @@ const config = {
   // Port number
   port: 5000,
 
+  // Rabbit port
+  rabbitUrl: `${process.env.RABBIT_URL}` || 'localhost',
+
   // Base url
-  baseURL: 'http://localhost:5005',
+  baseURL: 'localhost:5005',
 
   // DB url
-  dbUrl: 'remotemysql.com',
+  dbUrl: `${process.env.MYSQL_URL}` || 'remotemysql.com',
 
   // DB username
   dbUsername: 'qJkXGOrBPl',

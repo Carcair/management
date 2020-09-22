@@ -16,13 +16,13 @@ const Url = require('../models/sequelize/Url');
  */
 exports.createURLObj = (realURL, baseURL, arr) => {
   // Generate shortURL
-  let shortURL = baseURL + '/' + shortid.generate();
+  let shortURL = 'http://' + baseURL + '/' + shortid.generate();
 
   // In case if shortURL exists, generate until we get different
   // Prevent repetition
   // arr is an array with all shortURLs inside DB
   while (arr.includes(shortURL)) {
-    shortURL = baseURL + '/' + shortid.generate();
+    shortURL = 'http://' + baseURL + '/' + shortid.generate();
   }
 
   // Validate URLs

@@ -4,6 +4,11 @@
 const rabbit = require('amqplib/callback_api');
 
 /**
+ * Load secret variables
+ */
+const { rabbitUrl } = require('../../config');
+
+/**
  * Publisher
  */
 const rabbitHandler = {
@@ -13,7 +18,7 @@ const rabbitHandler = {
   sendFirstPayload: (payload) => {
     // On app start we send all existing DB data to consumer/redirection service
 
-    rabbit.connect('amqp://localhost:5672', (err, conn) => {
+    rabbit.connect(`amqp://${rabbitUrl}:5672`, (err, conn) => {
       if (err != null) throw err;
       // Open channel
       conn.createChannel((err, channel) => {
@@ -35,7 +40,7 @@ const rabbitHandler = {
    * Send payload on inserting new URL values in DB
    */
   sendPayload: (payload) => {
-    rabbit.connect('amqp://localhost:5672', (err, conn) => {
+    rabbit.connect(`amqp://${rabbitUrl}:5672`, (err, conn) => {
       // Open channel
       conn.createChannel((err, channel) => {
         if (err != null) throw err;
@@ -53,7 +58,7 @@ const rabbitHandler = {
    * Send URL inf on its deletion from DB
    */
   delPayload: (payload) => {
-    rabbit.connect('amqp://localhost:5672', (err, conn) => {
+    rabbit.connect(`amqp://${rabbitUrl}:5672`, (err, conn) => {
       // Open channel
       conn.createChannel((err, channel) => {
         if (err != null) throw err;
