@@ -1,12 +1,17 @@
 /**
  * Load modules
  */
-const rabbitConfig = require('../util/rabbitHandler');
+const RabbitHandler = require('../service/RabbitHandler');
 
 /**
  * Load sequelize schema
  */
 const Url = require('../models/sequelize/Url');
+
+/**
+ * Initialize rabbitHandler obj from its class
+ */
+const rabbitHandler = new RabbitHandler();
 
 /**
  * Delete a URL by its id
@@ -31,7 +36,7 @@ exports.deleteUrl = (req, res) => {
 
           // If there was a URL to delete
           // Send data of deleted url to Redirection service
-          rabbitConfig.delPayload(url);
+          rabbitHandler.delPayload(url);
 
           res.status(200).end('Deletion successful.');
         })

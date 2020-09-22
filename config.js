@@ -4,20 +4,19 @@
  */
 const config = {
   // Environment
-  NODE_ENV: 'development',
-  // env: 'production',
+  env: process.env.NODE_ENV || 'development',
 
   // Port number
-  port: 5000,
+  port: process.env.PORT || '5000',
 
   // Rabbit port
-  rabbitUrl: `${process.env.RABBIT_URL}` || 'localhost',
+  rabbitUrl: process.env.RABBIT_URL || 'localhost',
 
   // Base url
   baseURL: 'localhost:5005',
 
   // DB url
-  dbUrl: `${process.env.MYSQL_URL}` || 'remotemysql.com',
+  dbUrl: process.env.MYSQL_URL || 'remotemysql.com',
 
   // DB username
   dbUsername: 'qJkXGOrBPl',

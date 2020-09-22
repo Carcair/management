@@ -3,7 +3,12 @@
  */
 const validUrl = require('valid-url');
 const shortid = require('shortid');
-const rabbitHandler = require('./rabbitHandler');
+const RabbitHandler = require('../service/RabbitHandler');
+
+/**
+ * Initialize rabbitHandler object from its class
+ */
+const rabbitHandler = new RabbitHandler();
 
 /**
  * Load URL schema

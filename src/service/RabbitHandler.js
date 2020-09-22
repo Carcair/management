@@ -11,11 +11,11 @@ const { rabbitUrl } = require('../../config');
 /**
  * Publisher
  */
-const rabbitHandler = {
+class RabbitHandler {
   /**
    * Sending payload on project start
    */
-  sendFirstPayload: (payload) => {
+  sendFirstPayload(payload) {
     // On app start we send all existing DB data to consumer/redirection service
 
     rabbit.connect(`amqp://${rabbitUrl}:5672`, (err, conn) => {
@@ -34,12 +34,12 @@ const rabbitHandler = {
         );
       });
     });
-  },
+  }
 
   /**
    * Send payload on inserting new URL values in DB
    */
-  sendPayload: (payload) => {
+  sendPayload(payload) {
     rabbit.connect(`amqp://${rabbitUrl}:5672`, (err, conn) => {
       // Open channel
       conn.createChannel((err, channel) => {
@@ -52,12 +52,12 @@ const rabbitHandler = {
         channel.sendToQueue('newUrl', Buffer.from(JSON.stringify(payload)));
       });
     });
-  },
+  }
 
   /**
    * Send URL inf on its deletion from DB
    */
-  delPayload: (payload) => {
+  delPayload(payload) {
     rabbit.connect(`amqp://${rabbitUrl}:5672`, (err, conn) => {
       // Open channel
       conn.createChannel((err, channel) => {
@@ -70,7 +70,7 @@ const rabbitHandler = {
         channel.sendToQueue('delUrl', Buffer.from(JSON.stringify(payload)));
       });
     });
-  },
-};
+  }
+}
 
-module.exports = rabbitHandler;
+module.exports = RabbitHandler;

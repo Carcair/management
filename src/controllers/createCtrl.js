@@ -1,7 +1,7 @@
 /**
  * Load modules
  */
-const rabbitHandler = require('../util/rabbitHandler');
+const RabbitHandler = require('../service/RabbitHandler');
 
 /**
  * Load sequelize schema
@@ -19,76 +19,89 @@ const { createURLObj } = require('../util/helpers');
 const { baseURL } = require('../../config');
 
 /**
- * Check if realUrl exists
+ * Initialize rabbitHandler object
+ * from its class
  */
-exports.checkUrl = (req, res, next) => {
-  const realURL = req.body.realURL;
-
-  Url.findOne({
-    where: { realURL },
-    raw: true,
-  })
-    .then((url) => {
-      // Check if we got result
-      if (url == null) next();
-      else res.status(406).end('Already exists.');
-    })
-    .catch((err) => {
-      res.status(503).json({ err });
-    });
-};
+const rabbitHandler = new RabbitHandler();
 
 /**
- * Create URL and insert it in DB
+ * Class for Create route
  */
-exports.newUrl = async (req, res) => {
-  // Get realURL
-  const realURL = req.body.realURL;
+const create = {
+  /**
+   * Check if realUrl exists
+   */
+  checkUrl: (req, res, next) => {
+    const realURL = req.body.realURL;
+
+    Url.findOne({
+      where: { realURL },
+      raw: true,
+    })
+      .then((url) => {
+        // Check if we got result
+        if (url == null) next();
+        else res.status(406).end('Already exists.');
+      })
+      .catch((err) => {
+        res.status(503).json({ err });
+      });
+  },
 
   /**
-   * We need to generate shortURL that doesn't exist
+   * Create URL and insert it in DB
    */
-  Url.findAll()
-    .then((urls) => {
-      // Temp array with all existing shortURLs
-      let tempArr = [];
+  newUrl: async (req, res) => {
+    // Get realURL
+    const realURL = req.body.realURL;
 
-      // Seperate only shortURL variables
-      // We need to for comparison when generating new shortURL
-      urls.forEach((element) => {
-        tempArr.push(element.shortURL);
-      });
+    /**
+     * We need to generate shortURL that doesn't exist
+     */
+    Url.findAll()
+      .then((urls) => {
+        // Temp array with all existing shortURLs
+        let tempArr = [];
 
-      // Create object with URL variables
-      const temp = createURLObj(realURL, baseURL, tempArr);
-
-      // Will return 406 in case URLs aren't valid
-      if (temp === 406) res.status(406).end('Invalid URLs.');
-
-      // Insert into DB
-      Url.create(temp)
-        .then(() => {
-          // Return value we inserted as response
-          // So we can send it to redirection service
-          Url.findOne({
-            where: { realURL },
-            raw: true,
-          }).then((url) => {
-            // Successful insert
-
-            // Send url data to Redirection service
-            rabbitHandler.sendPayload(url);
-
-            res.status(201).json(url);
-          });
-        })
-        .catch((err) => {
-          // Failed query
-          res.status(503).json({ err });
+        // Seperate only shortURL variables
+        // We need to for comparison when generating new shortURL
+        urls.forEach((element) => {
+          tempArr.push(element.shortURL);
         });
-    })
-    .catch((err) => {
-      // Failed query
-      res.status(503).json({ err });
-    });
+
+        // Create object with URL variables
+        const temp = createURLObj(realURL, baseURL, tempArr);
+
+        // Will return 406 in case URLs aren't valid
+        if (temp === 406) res.status(406).end('Invalid URLs.');
+
+        // Insert into DB
+        Url.create(temp)
+          .then(() => {
+            // Return value we inserted as response
+            // So we can send it to redirection service
+            Url.findOne({
+              where: { realURL },
+              raw: true,
+            }).then((url) => {
+              // Successful insert
+
+              // Send url data to Redirection service
+              rabbitHandler.sendPayload(url);
+
+              res.status(201).json(url);
+            });
+          })
+          .catch((err) => {
+            // Failed query
+            res.status(503).json({ err });
+          });
+      })
+      .catch((err) => {
+        // Failed query
+        res.status(503).json({ err });
+      });
+  },
 };
+
+module.exports = create;
