@@ -1,0 +1,107 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "2.0",
+    "description": "Management Service for URL Shortening APP",
+    "title": "Management Service"
+  },
+  "host": "localhost:5000",
+  "paths": {
+    "/api/create": {
+      "post": {
+        "tags": ["Create"],
+        "summary": "Create URL",
+        "description": "Create new short URL from real URL",
+        "operationId": "create",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "New Url",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/newUrl"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "items": {
+                "$ref": "#/definitions/urlResponse"
+              }
+            }
+          },
+          "406": {
+            "description": "Invalid URL's / Short URL exists."
+          },
+          "503": {
+            "description": "Failed to connect to MySQL DB."
+          }
+        }
+      }
+    },
+    "/api/del/{id}": {
+      "delete": {
+        "tags": ["Delete"],
+        "summary": "Delete URL",
+        "description": "Delete URL from DB by its id",
+        "operationId": "delURL",
+        "parameters": [
+          {
+            "in": "path",
+            "type": "integer",
+            "name": "id",
+            "description": "id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deletion successful."
+          },
+          "204": {
+            "description": "Nothing to delete / No Content."
+          },
+          "503": {
+            "description": "MySQL error"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "newUrl": {
+      "type": "object",
+      "required": ["realURL"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "https://socket.io/"
+        }
+      }
+    },
+    "urlResponse": {
+      "type": "object",
+      "required": ["id", "realURL", "shortURL"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "68"
+        },
+        "realURL": {
+          "type": "string",
+          "example": "https://socket.io/"
+        },
+        "shortURL": {
+          "type": "string",
+          "example": "http://localhost:5005/8f832012"
+        }
+      }
+    }
+  }
+}

@@ -6,7 +6,7 @@
 //                                  //
 //////////////////////////////////////
 
-// TODO: Dockerizatio and Unit testing
+// TODO:
 // FIXME:
 
 /**
@@ -15,6 +15,12 @@
 const express = require('express');
 const cors = require('cors');
 const { getUrls } = require('./util/helpers');
+const swaggerUi = require('swagger-ui-express');
+
+/**
+ * Load swagger document
+ */
+const swaggerDoc = require('../swagger.json');
 
 /**
  * Load secret variables
@@ -48,6 +54,7 @@ const del = require('./routes/delete');
  */
 app.use('/api/create', create);
 app.use('/api/del', del);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
 // Create http server
 app.listen(port, () => {
