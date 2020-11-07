@@ -1,5 +1,5 @@
 /**
- * Load modules
+ * Load dependencies and modules
  */
 const validUrl = require('valid-url');
 const shortid = require('shortid');
@@ -43,12 +43,12 @@ exports.createURLObj = (realURL, baseURL, arr) => {
 };
 
 // Get all URLs
-// And sent them to Rabbit service
+// And send them to Rabbit service
 // This payload will be received on startup of Redirection service
-exports.getUrls = () => {
+exports.getUrls = (channel) => {
   Url.findAll({ raw: true })
     .then((urls) => {
-      rabbitHandler.sendFirstPayload(urls);
+      rabbitHandler.sendPayload(urls, 'firstPayload', channel);
     })
     .catch((err) => {
       console.log(err);
