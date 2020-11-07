@@ -1,17 +1,13 @@
 /**
- * Load modules
+ * Load modules and helpers
  */
 const RabbitHandler = require('../service/RabbitHandler');
+const { createURLObj } = require('../util/helpers');
 
 /**
  * Load sequelize schema
  */
 const Url = require('../models/sequelize/Url');
-
-/**
- * Load util helper functions
- */
-const { createURLObj } = require('../util/helpers');
 
 /**
  * Load secret variables
@@ -29,31 +25,12 @@ const rabbitHandler = new RabbitHandler();
  */
 const create = {
   /**
-   * Check if realUrl exists
-   */
-  checkUrl: (req, res, next) => {
-    const realURL = req.body.realURL;
-
-    Url.findOne({
-      where: { realURL },
-      raw: true,
-    })
-      .then((url) => {
-        // Check if we got result
-        if (url == null) next();
-        else res.status(406).end('Already exists.');
-      })
-      .catch((err) => {
-        res.status(503).json({ err });
-      });
-  },
-
-  /**
    * Create URL and insert it in DB
    */
   newUrl: async (req, res) => {
     // Get realURL
     const realURL = req.body.realURL;
+    
 
     /**
      * We need to generate shortURL that doesn't exist

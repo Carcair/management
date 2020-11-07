@@ -4,13 +4,11 @@
 const express = require('express');
 
 /**
- * Load controller
+ * Load controllers and middlewares
  */
-const { newUrl, checkUrl } = require('../controllers/createCtrl');
+const { newUrl } = require('../controllers/createCtrl');
+const { checkUrl } = require('../middlewares/createMw');
 
-/**
- * Load middlewares
- */
 const router = express.Router();
 
 /**
