@@ -63,6 +63,7 @@ const create = {
               raw: true,
             }).then((url) => {
               // Successful insert
+              console.log(app.get('test'));
               const rabbitHandler = new RabbitHandler(
                 url,
                 'firstPayload',
