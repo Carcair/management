@@ -10,7 +10,7 @@ const config = {
   port: process.env.PORT || '5000',
 
   // Rabbit port
-  rabbitUrl: process.env.RABBIT_URL || 'localhost',
+  rabbitUrl: `amqp://${process.env.RABBIT_URL}:5672` || 'amqp://localhost:5672',
 
   // Base url
   baseURL: 'localhost:5005',
