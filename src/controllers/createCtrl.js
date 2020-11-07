@@ -3,6 +3,8 @@
  */
 const RabbitHandler = require('../service/RabbitHandler');
 const { createURLObj } = require('../util/helpers');
+const express = require('express');
+const app = express();
 
 /**
  * Load sequelize schema
@@ -18,7 +20,7 @@ const { baseURL } = require('../../config');
  * Initialize rabbitHandler object
  * from its class
  */
-const rabbitHandler = new RabbitHandler();
+// const rabbitHandler = new RabbitHandler();
 
 /**
  * Class for Create route
@@ -30,7 +32,6 @@ const create = {
   newUrl: async (req, res) => {
     // Get realURL
     const realURL = req.body.realURL;
-    
 
     /**
      * We need to generate shortURL that doesn't exist
@@ -62,9 +63,13 @@ const create = {
               raw: true,
             }).then((url) => {
               // Successful insert
-
+              const rabbitHandler = new RabbitHandler(
+                url,
+                'firstPayload',
+                app.get('ch')
+              );
               // Send url data to Redirection service
-              rabbitHandler.sendPayload(url);
+              rabbitHandler.sendPayload();
 
               res.status(201).json(url);
             });
