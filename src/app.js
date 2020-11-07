@@ -41,13 +41,20 @@ app.use(cors());
  * Create connection to RabbitMQ and a channel
  */
 // const ch = createRabbitConn();
-const startConn = async () => {
+// const startConn = async () => {
+//   app.set('test', 'testing app set');
+//   const ch = await createRabbitConn();
+//   console.log(ch);
+//   app.set('ch', ch);
+// };
+
+// startConn();
+(async () => {
   app.set('test', 'testing app set');
   const ch = await createRabbitConn();
+  console.log(ch);
   app.set('ch', ch);
-};
-
-startConn();
+})();
 
 // /**
 //  * Initialize first data transfer

@@ -7,7 +7,7 @@ const { rabbitUrl } = require('../../config');
 
 exports.createRabbitConn = async () => {
   const conn = await amqp.connect(rabbitUrl);
-  return await conn.createChannel();
+  const ch = await conn.createChannel();
 
-  // return ch;
+  return ch;
 };
