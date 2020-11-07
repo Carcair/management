@@ -9,7 +9,7 @@ const { dbName, dbUsername, dbPass, dbUrl } = require('../../config');
 const Sequelize = require('sequelize');
 
 /**
- * Load connection obj
+ * Create connection object
  */
 const db = new Sequelize(dbName, dbUsername, dbPass, {
   host: dbUrl,
