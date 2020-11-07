@@ -43,7 +43,8 @@ app.use(cors());
 // const ch = createRabbitConn();
 const startConn = async () => {
   app.set('test', 'testing app set');
-  app.set('ch', await createRabbitConn());
+  const ch = await createRabbitConn();
+  app.set('ch', ch);
 };
 
 startConn();
