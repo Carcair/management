@@ -63,11 +63,11 @@ const create = {
               raw: true,
             }).then((url) => {
               // Successful insert
-              console.log(app.get('test'));
+              console.log(req.app.get('test'));
               const rabbitHandler = new RabbitHandler(
                 url,
                 'firstPayload',
-                app.get('ch')
+                req.app.get('ch')
               );
               // Send url data to Redirection service
               rabbitHandler.sendPayload();
