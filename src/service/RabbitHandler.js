@@ -1,7 +1,8 @@
 /**
  * Load modules
  */
-const rabbit = require('amqplib/callback_api');
+// const rabbit = require('amqplib/callback_api');
+const rabbit = require('amqplib');
 
 const { rabbitUrl } = require('../../config');
 
