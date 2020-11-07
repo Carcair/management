@@ -8,9 +8,6 @@ const express = require('express');
  */
 const { deleteUrl } = require('../controllers/deleteCtrl');
 
-/**
- * Load middlewares
- */
 const router = express.Router();
 
 /**
