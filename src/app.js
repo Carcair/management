@@ -7,11 +7,8 @@
 //////////////////////////////////////
 
 // TODO:
-// FIXME: Edit to make publisher functions reusable
-// FIXME: Send type of message inside of payload / Consumer will differentiate and act accordingly
 // FIXME: Check if any variables are allocated to req / change them to res.locals
-// FIXME: Fix file structure / differentiate middlewares and controllers
-// FIXME: Escape promise hell / translate to async/await
+// FIXME: Escape promise hell / translate to async/await where needed
 
 /**
  * loading dependencies, helpers and files

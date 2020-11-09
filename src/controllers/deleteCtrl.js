@@ -9,11 +9,6 @@ const RabbitHandler = require('../service/RabbitHandler');
 const Url = require('../models/sequelize/Url');
 
 /**
- * Initialize rabbitHandler obj from its class
- */
-const rabbitHandler = new RabbitHandler();
-
-/**
  * Delete a URL by its id
  */
 exports.deleteUrl = (req, res) => {
@@ -34,9 +29,18 @@ exports.deleteUrl = (req, res) => {
           // If there wasn't anything to delete
           if (result == 0) res.sendStatus(204);
 
+          /**
+           * Initialize rabbitHandler obj from its class
+           */
+          const rabbitHandler = new RabbitHandler(
+            url,
+            'delUrl',
+            req.app.get('ch')
+          );
+
           // If there was a URL to delete
           // Send data of deleted url to Redirection service
-          rabbitHandler.delPayload(url);
+          rabbitHandler.sendPayload();
 
           res.status(200).end('Deletion successful.');
         })

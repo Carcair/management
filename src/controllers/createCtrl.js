@@ -3,8 +3,6 @@
  */
 const RabbitHandler = require('../service/RabbitHandler');
 const { createURLObj } = require('../util/helpers');
-const express = require('express');
-const app = express();
 
 /**
  * Load sequelize schema
@@ -15,12 +13,6 @@ const Url = require('../models/sequelize/Url');
  * Load secret variables
  */
 const { baseURL } = require('../../config');
-
-/**
- * Initialize rabbitHandler object
- * from its class
- */
-// const rabbitHandler = new RabbitHandler();
 
 /**
  * Class for Create route
