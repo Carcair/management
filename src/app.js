@@ -7,8 +7,6 @@
 //////////////////////////////////////
 
 // TODO:
-// FIXME: Remove redundant comments
-// FIXME: Pull rabbit queue connection outside of queries / Once is enough
 // FIXME: Edit to make publisher functions reusable
 // FIXME: Send type of message inside of payload / Consumer will differentiate and act accordingly
 // FIXME: Check if any variables are allocated to req / change them to res.locals
@@ -37,26 +35,10 @@ const app = express();
 app.use(express.json({ limit: '500kb' }));
 app.use(cors());
 
-/**
- * Create connection to RabbitMQ and a channel
- */
-// const ch = createRabbitConn();
-// const startConn = async () => {
-//   app.set('test', 'testing app set');
-//   const ch = await createRabbitConn();
-//   console.log(ch);
-//   app.set('ch', ch);
-// };
-
-// startConn();
+// Create and start connection to RabbitMQ
 (async () => {
-  app.set('test', 'testing app set');
-  // const ch = await createRabbitConn();
-  // console.log(ch);
-  // app.set('ch', ch);
   const ch = createRabbitConn()
     .then((ch) => {
-      console.log(ch);
       app.set('ch', ch);
     })
     .catch((err) => {
@@ -67,7 +49,7 @@ app.use(cors());
 // /**
 //  * Initialize first data transfer
 //  */
-getUrls();
+getUrls(app.get('ch'));
 
 /**
  * Load routes and use

@@ -63,10 +63,9 @@ const create = {
               raw: true,
             }).then((url) => {
               // Successful insert
-              console.log(req.app.get('test'));
               const rabbitHandler = new RabbitHandler(
                 url,
-                'firstPayload',
+                'newUrl',
                 req.app.get('ch')
               );
               // Send url data to Redirection service
