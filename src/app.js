@@ -50,10 +50,18 @@ app.use(cors());
 
 // startConn();
 (async () => {
-  app.set('test', 'testing app set');
-  const ch = await createRabbitConn();
-  console.log(ch);
-  app.set('ch', ch);
+  try {
+    app.set('test', 'testing app set');
+    const ch = await createRabbitConn();
+    console.log(ch);
+    app.set('ch', ch);
+  } catch (error) {
+    console.log(error);
+  }
+  // app.set('test', 'testing app set');
+  // const ch = await createRabbitConn();
+  // console.log(ch);
+  // app.set('ch', ch);
 })();
 
 // /**
