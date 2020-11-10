@@ -29,8 +29,14 @@ const create = {
      * TODO: Transfering to async/await to escape promise hell
      */
     (async () => {
-      const urls = await Url.findAll();
-      console.log(JSON.stringify(urls));
+      // let urls = await Url.findAll();
+      // console.log('Urls: ' + JSON.stringify(urls, null, 2));
+      async function test() {
+        let urls = await Url.findAll();
+        console.log(urls);
+      }
+      await test();
+      console.log(urls);
     })();
 
     /**
