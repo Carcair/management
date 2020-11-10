@@ -43,13 +43,13 @@ app.use(cors());
     });
 })();
 
-// /**
-//  * Initialize first data transfer
-//  */
+/**
+ * Initialize first data transfer
+ */
 getUrls(app.get('ch'));
 
 /**
- * Load routes and use
+ * Load routes and use them
  */
 const create = require('./routes/create');
 const del = require('./routes/delete');

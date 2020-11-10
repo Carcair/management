@@ -26,6 +26,14 @@ const create = {
     const realURL = req.body.realURL;
 
     /**
+     * TODO: Transfering to async/await to escape promise hell
+     */
+    (async () => {
+      const urls = await Url.findAll();
+      console.log(urls);
+    })();
+
+    /**
      * We need to generate shortURL that doesn't exist
      */
     Url.findAll()

@@ -6,18 +6,13 @@ const shortid = require('shortid');
 const RabbitHandler = require('../service/RabbitHandler');
 
 /**
- * Initialize rabbitHandler object from its class
- */
-const rabbitHandler = new RabbitHandler();
-
-/**
  * Load URL schema
  */
 const Url = require('../models/sequelize/Url');
 
 /**
  * Generate object of URL variables
- * that will insert into DB
+ * that we'll insert into DB
  */
 exports.createURLObj = (realURL, baseURL, arr) => {
   // Generate shortURL
@@ -25,7 +20,6 @@ exports.createURLObj = (realURL, baseURL, arr) => {
 
   // In case if shortURL exists, generate until we get different
   // Prevent repetition
-  // arr is an array with all shortURLs inside DB
   while (arr.includes(shortURL)) {
     shortURL = 'http://' + baseURL + '/' + shortid.generate();
   }
@@ -48,7 +42,11 @@ exports.createURLObj = (realURL, baseURL, arr) => {
 exports.getUrls = (channel) => {
   Url.findAll({ raw: true })
     .then((urls) => {
-      rabbitHandler.sendPayload(urls, 'firstPayload', channel);
+      /**
+       * Initialize rabbitHandler object from its class
+       */
+      const rabbitHandler = new RabbitHandler(urls, 'firstPayload', channel);
+      rabbitHandler.sendPayload();
     })
     .catch((err) => {
       console.log(err);

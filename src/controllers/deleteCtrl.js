@@ -38,7 +38,6 @@ exports.deleteUrl = (req, res) => {
             req.app.get('ch')
           );
 
-          // If there was a URL to delete
           // Send data of deleted url to Redirection service
           rabbitHandler.sendPayload();
 
