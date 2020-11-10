@@ -3,6 +3,7 @@
  */
 const RabbitHandler = require('../service/RabbitHandler');
 const { createURLObj } = require('../util/helpers');
+const sequelize = require('sequelize');
 
 /**
  * Load sequelize schema
@@ -13,6 +14,7 @@ const Url = require('../models/sequelize/Url');
  * Load secret variables
  */
 const { baseURL } = require('../../config');
+const { Sequelize } = require('sequelize');
 
 /**
  * Class for Create route
@@ -30,18 +32,7 @@ const create = {
      */
     (async () => {
       // let urls = await Url.findAll();
-      // console.log('Urls: ' + JSON.stringify(urls, null, 2));
-      async function test() {
-        let urls = await Url.findAll();
-        console.log(urls);
-        return urls;
-      }
-      try {
-        let urls = await test();
-        console.log(urls);
-      } catch (error) {
-        console.log(error);
-      }
+      console.log('Urls: ' + JSON.stringify(await Url.findAll(), null, 2));
     })();
 
     /**
