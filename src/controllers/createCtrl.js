@@ -34,9 +34,14 @@ const create = {
       async function test() {
         let urls = await Url.findAll();
         console.log(urls);
+        return urls;
       }
-      await test();
-      console.log(urls);
+      try {
+        let urls = await test();
+        console.log(urls);
+      } catch (error) {
+        console.log(error);
+      }
     })();
 
     /**
