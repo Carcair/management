@@ -30,7 +30,7 @@ const create = {
      */
     (async () => {
       const urls = await Url.findAll();
-      console.log(urls);
+      console.log(JSON.stringify(urls));
     })();
 
     /**
